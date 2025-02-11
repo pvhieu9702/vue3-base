@@ -1,0 +1,13 @@
+echo -e "\033[32mLint-staged checking...\033[0m"
+npx lint-staged || { echo "Lint-staged failed"; exit 1; }
+
+echo -e "\033[32mTypescript checking...\033[0m"
+npx tsc --skipLibCheck --noEmit || { echo "TypeScript check failed"; exit 1; }
+
+echo -e "\033[32mBuilding...\033[0m"
+npm run build || { echo "Build failed"; exit 1; }
+
+echo -e "Run \033[33m'npm run preview'\033[0m to double check the build"
+
+echo -e "✅ \033[32mCommit validated\033[0m"
+exit 0
