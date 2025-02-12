@@ -1,6 +1,6 @@
 import './assets/main.css'
-import PrimeVue from 'primevue/config';
-import Material from '@primevue/themes/material';
+import PrimeVue from 'primevue/config'
+import Material from '@primevue/themes/material'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -13,10 +13,12 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(PrimeVue, {
-  theme: {
-    preset: Material
-  },
-});
-
+	theme: {
+		preset: Material,
+		options: {
+			darkModeSelector: false || 'none',
+		},
+	},
+})
 
 app.mount('#app')
