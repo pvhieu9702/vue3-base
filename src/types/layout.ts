@@ -1,6 +1,6 @@
 export interface SidebarItemInterface {
 	to?: string
-	label: string
+	label?: string
 	disabled?: boolean
 	visible?: boolean
 	url?: string

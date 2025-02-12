@@ -33,14 +33,16 @@
 
 	.header {
 		grid-area: header;
-		background-color: #f0f0f0;
+		/* background-color: #f0f0f0; */
 		padding: 10px;
+		border-bottom: 1px solid gray;
 	}
 
 	.sidebar {
 		grid-area: sidebar;
-		background-color: #e0e0e0;
+		/* background-color: #e0e0e0; */
 		padding: 10px;
+		border-right: 1px solid gray;
 	}
 
 	.main-content {
