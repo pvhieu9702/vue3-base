@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import type { SidebarItemInterface } from '@/types/layout'
-	import { ref, withDefaults, defineProps, onBeforeMount } from 'vue'
+	import { ref, onBeforeMount } from 'vue'
 	interface SidebarItemProps {
 		item: SidebarItemInterface
 		index?: number
