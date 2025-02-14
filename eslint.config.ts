@@ -21,4 +21,22 @@ export default defineConfigWithVueTs(
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
   skipFormatting,
+  {
+    name: 'custom-rules',
+    rules: {
+      'no-plusplus': [
+        'error',
+        {
+          'allowForLoopAfterthoughts': true,
+        }
+      ]
+    },
+    settings: {
+      'import/resolver': {
+        alias: {
+          map: [['@', './src']],
+        }
+      }
+    }
+  }
 )
