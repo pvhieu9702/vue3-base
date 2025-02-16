@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getAccessToken, getRefreshToken, handleLogout } from "@/libs/helpers/auth";
 import axios, { type AxiosResponse } from "axios";
 
@@ -6,6 +7,7 @@ let isTokenExpired = false
 let refreshTokenRequest: Promise<unknown> | null = null
 
 const instance = axios.create({
+  baseURL: import.meta.env.VITE_BASE_URL_API,
   timeout: import.meta.env.VITE_TIME_OUT_REQUEST,
   headers: {
     'Content-Type': 'application/json',
@@ -28,8 +30,8 @@ const refreshTokenHandle = async (): Promise<string | undefined> => {
     // [TODO]: Set refreshToken
 
     return 'new token'
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-  } catch (_error: any) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error: any) {
     // [TODO]: Remove accessToken
     // [TODO]: Remove refreshToken
     return undefined
@@ -38,7 +40,7 @@ const refreshTokenHandle = async (): Promise<string | undefined> => {
 
 /** Pre request */
 instance.interceptors.request.use(
-  async (config) => {
+  async (config: any) => {
     const defaultToken = config.headers?.Authorization
       ? String(config.headers.Authorization)
       : undefined
@@ -50,13 +52,13 @@ instance.interceptors.request.use(
 
     return config
   },
-  async (error) => Promise.reject(error),
+  async (error: any) => Promise.reject(error),
 )
 
 /** Pre response */
 instance.interceptors.response.use(
-  async (response) => Promise.resolve(response),
-  async (error) => {
+  async (response: any) => Promise.resolve(response),
+  async (error: any) => {
     const status = error?.response?.status
     const { url } = error.config
     const noRefreshTokenUrls = ['/auth/refresh']
