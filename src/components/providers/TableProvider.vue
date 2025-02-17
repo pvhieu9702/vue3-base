@@ -1,19 +1,20 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-	// import { defineProps, provide } from 'vue'
+	import { defineProps, provide } from 'vue'
+	import { useTable } from './useTable'
+	import type { ApiListResponse } from '@/types/core'
 
-	// const props = defineProps({
-	// 	fetchData: {
-	// 		type: Function,
-	// 		required: true,
-	// 	},
-	// 	initFilter: Object,
-	// })
+	interface TableProviderProps<T> {
+		fetchData: () => Promise<ApiListResponse<T>>
+		initialFilter?: Record<string, any>
+	}
+	const props = defineProps<TableProviderProps<any>>()
 
-	// const tableState = table({
-	// 	fetchData: props.fetchData,
-	// 	initFilter: props.initFilter,
-	// })
-	// provide('TableProvider', tableState)
+	const tableState = useTable({
+		fetchData: props.fetchData,
+		initialFilter: props.initialFilter,
+	})
+	provide('TableProvider', tableState)
 </script>
 
 <template>

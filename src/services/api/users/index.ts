@@ -1,4 +1,4 @@
-import type { User, UserFilter } from "@/types/models/User";
+import type { User, UserFilter } from "@/types/models/user";
 import { crudService } from "../core/crudService";
 
 export const UserApi = {

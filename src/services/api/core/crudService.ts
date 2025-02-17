@@ -1,8 +1,8 @@
-import type { BaseFilter } from "@/types/core"
+import type { ApiListResponse, BaseFilter } from "@/types/core"
 import instance from "./axios"
 
 export const crudService = <T, Filter extends BaseFilter>(resource: string) => ({
-  getAll: async (filter: Filter = {} as Filter): Promise<T[]> => {
+  getAll: async (filter: Filter = {} as Filter): Promise<ApiListResponse<T>> => {
     const response = await instance.get(`/${resource}`, { params: filter })
     return response.data
   },

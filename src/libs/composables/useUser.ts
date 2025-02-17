@@ -1,5 +1,5 @@
 import { UserApi } from "@/services/api/users"
-import type { User, UserFilter } from "@/types/models/User"
+import type { User, UserFilter } from "@/types/models/user"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
 import { ref } from "vue"
 
