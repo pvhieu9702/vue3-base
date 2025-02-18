@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { useTableProvider } from '@/hooks/useTableProvider'
+	import { useTableProvider } from '@/libs/hooks/useTableProvider'
 	import type { User } from '@/types/models/user'
 
 	const { data, isFetching } = useTableProvider<User>()

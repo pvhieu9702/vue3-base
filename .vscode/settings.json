@@ -1,8 +1,13 @@
 {
+	"search.exclude": {
+		"package-lock.json": true
+	},
 	"editor.codeActionsOnSave": {
+		"source.addMissingImports": "always",
 		"source.fixAll": "always"
 	},
 	"editor.formatOnSave": true,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"files.insertFinalNewline": true
+	"files.insertFinalNewline": true,
+	"prettier.ignorePath": ".gitignore"
 }
