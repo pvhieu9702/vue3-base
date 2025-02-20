@@ -1,8 +1,8 @@
 <script setup lang="ts">
 	import { RouterLink } from 'vue-router'
-	import { useCounterStore } from '@/stores/uiStore'
+	import { useUiStore } from '@/stores/uiStore'
 
-	const uiStore = useCounterStore()
+	const uiStore = useUiStore()
 
 	const handleToggleDarkMode = () => {
 		// uiStore.toggleDarkMode()

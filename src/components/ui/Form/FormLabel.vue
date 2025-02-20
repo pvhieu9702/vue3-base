@@ -10,11 +10,24 @@
 </script>
 
 <template>
-	<label
-		:for="props.htmlFor"
-		:class="['', props.className]"
-	>
-		<span>{{ props.label }}</span>
-		<span v-if="props.required">*</span>
-	</label>
+	<div class="px-2 min-w-[100px]">
+		<label
+			:for="props.htmlFor"
+			:class="['', props.className]"
+		>
+			<span>{{ props.label }}</span>
+			<span
+				v-if="props.required"
+				:class="['', { 'text-red-500': props.required }]"
+			>
+				*
+			</span>
+		</label>
+	</div>
 </template>
+
+<style scoped>
+	label {
+		display: block;
+	}
+</style>

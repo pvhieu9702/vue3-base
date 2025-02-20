@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-export const useCounterStore = defineStore('ui', () => {
+export const useUiStore = defineStore('ui', () => {
 	const isDarkMode = ref<boolean>(false)
 
 	function toggleDarkMode() {

@@ -1,10 +1,9 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 	import { InputText } from 'primevue'
-	import { computed, useId } from 'vue'
-	import { useFormProvider } from '@/libs/hooks/useFormProvider'
+	import { useId } from 'vue'
 	import FormLabel from './FormLabel.vue'
-	import { ErrorMessage } from 'vee-validate'
+	import { Field } from 'vee-validate'
 
 	interface FormInputProps {
 		name: string
@@ -15,17 +14,25 @@
 		labelClassName?: string
 		className?: string
 		hiddenError?: boolean
+		validateOnMount?: boolean
+		validateOnInput?: boolean
+		validateOnChange?: boolean
+		validateOnBlur?: boolean
+		validateOnModelUpdate?: boolean
 	}
-	const props = defineProps<FormInputProps>()
+	const props = withDefaults(defineProps<FormInputProps>(), {
+		validateOnMount: false,
+		validateOnInput: false,
+		validateOnChange: false,
+		validateOnBlur: false,
+		validateOnModelUpdate: false,
+	})
 
-	const formContext = useFormProvider()
 	const uid = useId()
-
-	const [field, fieldAttrs] = formContext.defineField(props.name)
 </script>
 
 <template>
-	<div>
+	<div class="flex items-center">
 		<FormLabel
 			:html-for="uid"
 			v-if="props.label"
@@ -34,18 +41,31 @@
 			:class-name="props.labelClassName"
 		/>
 
-		<InputText
-			v-model="field"
-			v-bind="fieldAttrs"
-			type="text"
-			:placeholder="props.placeholder"
-			:disabled="props.disabled"
-		/>
-		<div
-			v-if="formContext.errors.value[props.name]"
-			class="text-red-500"
-		>
-			{{ formContext.errors.value[props.name] }}
+		<div class="py-2 px-2">
+			<Field
+				:name="props.name"
+				v-slot="{ field, errorMessage }"
+				:validateOnMount="props.validateOnMount"
+				:validateOnInput="props.validateOnInput"
+				:validateOnChange="props.validateOnChange"
+				:validateOnBlur="props.validateOnBlur"
+				:validateOnModelUpdate="props.validateOnModelUpdate"
+			>
+				<InputText
+					v-bind="field"
+					:id="uid"
+					type="text"
+					:placeholder="props.placeholder"
+					:disabled="props.disabled"
+					:class="['h-8', props.className]"
+				/>
+				<div
+					v-if="errorMessage && !hiddenError"
+					class="text-red-500"
+				>
+					{{ errorMessage }}
+				</div>
+			</Field>
 		</div>
 	</div>
 </template>
