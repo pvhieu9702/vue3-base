@@ -1,6 +1,7 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 	import { useForm, type GenericObject } from 'vee-validate'
+	import { onMounted, watch } from 'vue'
 
 	interface FormContainerProps<T extends GenericObject> {
 		initValues?: T
@@ -9,7 +10,20 @@
 	}
 	const props = defineProps<FormContainerProps<any>>()
 
-	const { handleSubmit } = useForm({
+	onMounted(() => {
+		if (props.initValues) {
+			if (typeof props.initValues === 'object') {
+				setValues(props.initValues)
+			} else if (
+				typeof props.initValues === 'function' &&
+				typeof props.initValues() === 'object'
+			) {
+				setValues(props.initValues())
+			}
+		}
+	})
+
+	const { handleSubmit, setValues } = useForm({
 		initialValues: props.initValues,
 		validationSchema: props.validationSchema,
 	})
@@ -17,6 +31,23 @@
 	const onHandleSubmit = handleSubmit((data: GenericObject) => {
 		props.onSubmit(data)
 	})
+
+	watch(
+		() => props.initValues,
+		(newVal) => {
+			if (newVal) {
+				if (typeof newVal === 'object') {
+					setValues(newVal)
+				} else if (
+					typeof newVal === 'function' &&
+					typeof newVal() === 'object'
+				) {
+					setValues(newVal())
+				}
+			}
+		},
+		{ deep: true }, // Watch deep để xử lý nested objects
+	)
 </script>
 
 <template>

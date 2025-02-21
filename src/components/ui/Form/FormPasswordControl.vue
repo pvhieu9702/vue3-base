@@ -3,22 +3,18 @@
 	import { Password } from 'primevue'
 	import { useId } from 'vue'
 	import FormLabel from './FormLabel.vue'
-	import { useField } from 'vee-validate'
+	import { Field } from 'vee-validate'
+	import type { FormControlInterface } from '@/types/form'
+	import { FORM_CONTROL_VALIDATE_ON } from '@/libs/constants/common'
 
-	interface FormInputProps {
-		name: string
+	interface FormPasswordControlProps extends FormControlInterface {
 		placeholder?: string
-		label?: string
-		required?: boolean
-		disabled?: boolean
-		labelClassName?: string
-		className?: string
-		hiddenError?: boolean
 	}
-	const props = defineProps<FormInputProps>()
+	const props = withDefaults(defineProps<FormPasswordControlProps>(), {
+		...FORM_CONTROL_VALIDATE_ON,
+	})
 
 	const uid = useId()
-	const { value, errorMessage } = useField<string | null>(() => props.name)
 </script>
 
 <template>
@@ -32,20 +28,30 @@
 		/>
 
 		<div class="py-1 px-2">
-			<Password
-				:input-id="uid"
-				v-model="value"
-				:placeholder="props.placeholder"
-				:disabled="props.disabled"
-				:class="['h-8', props.className]"
-				:feedback="false"
-			/>
-			<div
-				v-if="errorMessage && !hiddenError"
-				class="text-red-500"
+			<Field
+				:name="props.name"
+				v-slot="{ field, errorMessage }"
+				:validateOnMount="props.validateOnMount"
+				:validateOnInput="props.validateOnInput"
+				:validateOnChange="props.validateOnChange"
+				:validateOnBlur="props.validateOnBlur"
+				:validateOnModelUpdate="props.validateOnModelUpdate"
 			>
-				{{ errorMessage }}
-			</div>
+				<Password
+					v-bind="field"
+					:id="uid"
+					:placeholder="props.placeholder"
+					:disabled="props.disabled"
+					:class="['h-8', props.className]"
+					:feedback="false"
+				/>
+				<div
+					v-if="errorMessage && !hiddenError"
+					class="text-red-500"
+				>
+					{{ errorMessage }}
+				</div>
+			</Field>
 		</div>
 	</div>
 </template>

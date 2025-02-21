@@ -1,6 +1,6 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-	import { defineProps, provide } from 'vue'
+	import { provide } from 'vue'
 	import { useTable } from './useTable'
 	import type { ApiListResponse } from '@/types/core'
 
