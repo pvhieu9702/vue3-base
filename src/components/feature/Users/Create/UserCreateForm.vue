@@ -5,6 +5,7 @@
 	import FormDatePickerControl from '@/components/ui/Form/FormDatePickerControl.vue'
 	import FormTextControl from '@/components/ui/Form/FormTextControl.vue'
 	import yup, { useSchema } from '@/libs/validation'
+	import type { CheckBoxOptionInterface } from '@/types/form'
 	import { Button } from 'primevue'
 	import { ref } from 'vue'
 
@@ -23,7 +24,7 @@
 		}),
 	)
 
-	const categories = ref([
+	const categories = ref<CheckBoxOptionInterface[]>([
 		{ value: 'electronics', label: 'Electronics' },
 		{ value: 'clothing', label: 'Clothing' },
 		{ value: 'books', label: 'Books' },
@@ -53,10 +54,7 @@
 		<FormDatePickerControl
 			name="date"
 			label="Date"
-			show-icon
-			size="small"
 		/>
-
 		<Button
 			type="submit"
 			severity="secondary"

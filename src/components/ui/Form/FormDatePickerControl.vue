@@ -6,12 +6,21 @@
 	import type { FormControlInterface } from '@/types/form'
 	import { FORM_CONTROL_VALIDATE_ON } from '@/libs/constants/common'
 
-	interface FormCheckboxControlProps
-		extends FormControlInterface,
-			Omit<DatePickerProps, 'modelValue' | 'name'> {
-		checkBoxLabel?: string
+	interface FormDatePickerControlProps extends FormControlInterface {
+		selectionMode?: DatePickerProps['selectionMode']
+		dateFormat?: string
+		inline?: boolean
+		showIcon?: boolean
+		minDate?: DatePickerProps['minDate']
+		disabledDates?: DatePickerProps['disabledDates']
+		disabledDays?: DatePickerProps['disabledDays']
+		maxDateCount?: DatePickerProps['maxDateCount']
+		hideOnDateTimeSelect?: DatePickerProps['hideOnDateTimeSelect']
+		hideOnRangeSelection?: DatePickerProps['hideOnRangeSelection']
+		manualInput?: DatePickerProps['manualInput']
+		placeholder?: DatePickerProps['placeholder']
 	}
-	const props = withDefaults(defineProps<FormCheckboxControlProps>(), {
+	const props = withDefaults(defineProps<FormDatePickerControlProps>(), {
 		...FORM_CONTROL_VALIDATE_ON,
 		dateFormat: 'yy/mm/dd',
 	})
@@ -39,16 +48,24 @@
 				:validateOnBlur="props.validateOnBlur"
 				:validateOnModelUpdate="props.validateOnModelUpdate"
 			>
-				<div class="flex items-center gap-2">
-					<DatePicker
-						:modelValue="field.value"
-						v-bind="props"
-						:inputId="uid"
-						:class="['min-w-[176px]', props.className]"
-						@update:modelValue="setValue"
-					/>
-					<label :for="uid">{{ props.checkBoxLabel }}</label>
-				</div>
+				<DatePicker
+					:modelValue="field.value"
+					:inputId="uid"
+					:class="['min-w-[176px]', { 'h-8': !props.inline }, props.className]"
+					@update:modelValue="setValue"
+					:selectionMode="props.selectionMode"
+					:dateFormat="props.dateFormat"
+					:inline="props.inline"
+					:showIcon="props.showIcon"
+					:minDate="props.minDate"
+					:disabledDates="props.disabledDates"
+					:disabledDays="props.disabledDays"
+					:maxDateCount="props.maxDateCount"
+					:hideOnDateTimeSelect="props.hideOnDateTimeSelect"
+					:hideOnRangeSelection="props.hideOnRangeSelection"
+					:manualInput="props.manualInput"
+					:placeholder="props.placeholder"
+				/>
 				<div
 					v-if="errorMessage && !hiddenError"
 					class="text-red-500"
