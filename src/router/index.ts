@@ -25,8 +25,8 @@ const router = createRouter({
 							path: 'create',
 							name: 'createUser',
 							component: () => import('@/pages/Users/UserCreate.vue'),
-						}
-					]
+						},
+					],
 				},
 			],
 		},

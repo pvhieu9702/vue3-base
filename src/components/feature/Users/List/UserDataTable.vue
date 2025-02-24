@@ -1,18 +1,19 @@
 <script setup lang="ts">
-	import { useTableProvider } from '@/libs/hooks/useTableProvider'
+	import TableElement from '@/components/ui/TableElement.vue'
+	import { useTableProvider } from '@/libs/hooks/useTable'
 	import type { User } from '@/types/models/user'
 
-	const { data, isFetching } = useTableProvider<User>()
+	const { data } = useTableProvider<User>()
+	const columns = [
+		{ field: 'id', header: 'ID' },
+		{ field: 'first_name', header: 'First name' },
+		{ field: 'last_name', header: 'Last name' },
+		{ field: 'gender', header: 'Gender' },
+	]
 </script>
 <template>
-	<div v-if="isFetching">Đang tải...</div>
-	<ul v-else>
-		<!-- <p>Total: {{ data?.total }}</p> -->
-		<li
-			v-for="user in data?.data"
-			:key="user.id"
-		>
-			{{ user.id }}: {{ user.first_name }} {{ user.last_name }}
-		</li>
-	</ul>
+	<TableElement
+		:data="data?.data"
+		:columns="columns"
+	></TableElement>
 </template>
