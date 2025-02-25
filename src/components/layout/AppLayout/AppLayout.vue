@@ -13,7 +13,7 @@
 		</div>
 		<main class="main-content">
 			<div class="pb-8 flex-auto">
-				<router-view></router-view>
+				<slot></slot>
 			</div>
 			<AppFooter />
 		</main>

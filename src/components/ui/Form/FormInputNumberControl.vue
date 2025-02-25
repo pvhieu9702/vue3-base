@@ -40,7 +40,7 @@
 			:class-name="props.labelClassName"
 		/>
 
-		<div class="py-2 px-2">
+		<div class="py-2 px-2 grow">
 			<Field
 				:name="props.name"
 				v-slot="{ field, errorMessage, setValue }"

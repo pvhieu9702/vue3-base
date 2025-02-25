@@ -1,13 +1,20 @@
-import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import type { UiState } from '@/types/ui'
+import { LAYOUT } from '@/libs/constants/layout'
+import type { ValueOf } from '@/types/core'
 
-export const useUiStore = defineStore('ui', () => {
-	const isDarkMode = ref<boolean>(false)
-
-	function toggleDarkMode() {
-		isDarkMode.value = !isDarkMode.value
-		document.documentElement.classList.toggle('dark-theme')
-	}
-
-	return { isDarkMode, toggleDarkMode }
+export const useUiStore = defineStore('ui', {
+	state: (): UiState => ({
+		darkMode: false,
+		currentLayout: LAYOUT.PUBLIC,
+	}),
+	actions: {
+		toggleDarkMode() {
+			this.darkMode = !this.darkMode
+			document.documentElement.classList.toggle('dark-theme')
+		},
+		setLayout(layout: ValueOf<typeof LAYOUT>) {
+			this.currentLayout = layout
+		},
+	},
 })

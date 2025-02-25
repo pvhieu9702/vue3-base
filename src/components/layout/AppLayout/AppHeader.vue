@@ -29,7 +29,7 @@
 			<i
 				:class="[
 					'pi',
-					{ 'pi-moon': uiStore.isDarkMode, 'pi-sun': !uiStore.isDarkMode },
+					{ 'pi-moon': uiStore.darkMode, 'pi-sun': !uiStore.darkMode },
 					'cursor-pointer',
 				]"
 				@click="handleToggleDarkMode"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { InputText } from 'primevue'
-	import { useId } from 'vue'
+	import { useId, type InputTypeHTMLAttribute } from 'vue'
 	import FormLabel from './FormLabel.vue'
 	import { Field } from 'vee-validate'
 	import type { FormControlInterface } from '@/types/form'
@@ -9,9 +9,11 @@
 	interface FormTextControlProps extends FormControlInterface {
 		placeholder?: string
 		fluid?: boolean
+		type?: InputTypeHTMLAttribute
 	}
 	const props = withDefaults(defineProps<FormTextControlProps>(), {
 		...FORM_CONTROL_VALIDATE_ON,
+		type: 'text',
 	})
 
 	const uid = useId()
@@ -27,7 +29,7 @@
 			:class-name="props.labelClassName"
 		/>
 
-		<div class="py-2 px-2">
+		<div class="py-2 px-2 grow">
 			<Field
 				:name="props.name"
 				v-slot="{ field, errorMessage }"
@@ -40,7 +42,7 @@
 				<InputText
 					v-bind="field"
 					:id="uid"
-					type="text"
+					:type="props.type"
 					:placeholder="props.placeholder"
 					:disabled="props.disabled"
 					:class="['h-8', props.className]"
