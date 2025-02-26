@@ -2,15 +2,19 @@
 	import LoginForm from '@/components/feature/Login/LoginForm.vue'
 	import IconLogo from '@/components/icons/IconLogo.vue'
 	import FormContainer from '@/components/ui/Form/FormContainer.vue'
-	import { LAYOUT } from '@/libs/constants/layout'
 	import yup, { useSchema } from '@/libs/validation'
+	import type { AuthRequest } from '@/types/auth'
+	import { useUiStore } from '../stores/uiStore'
+	import { AuthApi } from '@/services/api/auth'
+	import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/libs/constants/local'
+	import { setCookie } from '@/libs/helpers/cookie'
 	import router from '@/router'
-	import { useAuthStore } from '@/stores/authStore'
-	import { useUiStore } from '@/stores/uiStore'
+	import { LAYOUT } from '@/libs/constants/layout'
+	import type { RequestError } from '@/types/core'
+	import { useMutation } from '@tanstack/vue-query'
 
-	interface LoginInterface {
-		email: string
-		password: string
+	const uiStore = useUiStore()
+	interface LoginInterface extends AuthRequest {
 		remember?: boolean
 	}
 
@@ -28,11 +32,25 @@
 		}),
 	)
 
-	const handleSubmit = (data: LoginInterface) => {
-		console.log(data)
-		useAuthStore().login('admin')
-		router.push({ name: 'home' })
-		useUiStore().setLayout(LAYOUT.DEFAULT)
+	const { mutateAsync } = useMutation({
+		mutationFn: async (data: AuthRequest) => {
+			const { accessToken, refreshToken } = await AuthApi.login(data)
+
+			return { accessToken, refreshToken }
+		},
+		onSuccess: ({ accessToken, refreshToken }) => {
+			setCookie(ACCESS_TOKEN, accessToken)
+			setCookie(REFRESH_TOKEN, refreshToken)
+			router.push({ name: 'home' })
+			uiStore.setLayout(LAYOUT.DEFAULT)
+		},
+		onError: (err: RequestError) => {
+			console.error(err)
+		},
+	})
+
+	const handleSubmit = async (data: LoginInterface) => {
+		await mutateAsync(data)
 	}
 </script>
 

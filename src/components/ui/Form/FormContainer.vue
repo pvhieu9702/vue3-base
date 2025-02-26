@@ -13,36 +13,41 @@
 	onMounted(() => {
 		if (props.initValues) {
 			if (typeof props.initValues === 'object') {
-				setValues(props.initValues)
+				methods.setValues(props.initValues)
 			} else if (
 				typeof props.initValues === 'function' &&
 				typeof props.initValues() === 'object'
 			) {
-				setValues(props.initValues())
+				methods.setValues(props.initValues())
 			}
 		}
 	})
 
-	const { handleSubmit, setValues } = useForm({
+	const methods = useForm({
 		initialValues: props.initValues,
 		validationSchema: props.validationSchema,
 	})
 
-	const onHandleSubmit = handleSubmit((data: GenericObject) => {
-		props.onSubmit(data)
-	})
+	const onHandleSubmit = async (event: Event) => {
+		try {
+			event.preventDefault()
+			methods.handleSubmit(props.onSubmit)()
+		} catch (err) {
+			console.log(err)
+		}
+	}
 
 	watch(
 		() => props.initValues,
 		(newVal) => {
 			if (newVal) {
 				if (typeof newVal === 'object') {
-					setValues(newVal)
+					methods.setValues(newVal)
 				} else if (
 					typeof newVal === 'function' &&
 					typeof newVal() === 'object'
 				) {
-					setValues(newVal())
+					methods.setValues(newVal())
 				}
 			}
 		},
@@ -54,7 +59,7 @@
 	<form
 		:initial-values="props.initValues"
 		:validation-schema="props.validationSchema"
-		@submit="onHandleSubmit"
+		@submit.prevent="onHandleSubmit"
 	>
 		<slot></slot>
 	</form>

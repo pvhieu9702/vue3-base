@@ -8,7 +8,7 @@
 		{ field: 'id', header: 'ID' },
 		{ field: 'first_name', header: 'First name' },
 		{ field: 'last_name', header: 'Last name' },
-		{ field: 'gender', header: 'Gender' },
+		{ field: 'email', header: 'Email' },
 	]
 </script>
 <template>

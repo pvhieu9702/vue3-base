@@ -8,11 +8,7 @@ export const crudService = <T, Filter extends BaseFilter>(
 		filter: Filter = {} as Filter,
 	): Promise<ApiListResponse<T>> => {
 		const response = await instance.get(`/${resource}`, { params: filter })
-		// return response.data
-		return {
-			data: response.data,
-			total: 10,
-		}
+		return response.data
 	},
 
 	getById: async (id: number): Promise<T> => {

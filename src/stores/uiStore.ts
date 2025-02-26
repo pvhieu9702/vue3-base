@@ -7,6 +7,7 @@ export const useUiStore = defineStore('ui', {
 	state: (): UiState => ({
 		darkMode: false,
 		currentLayout: LAYOUT.PUBLIC,
+		// currentLayout: LAYOUT.PUBLIC,
 	}),
 	actions: {
 		toggleDarkMode() {
