@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { authGuard } from './middleware'
+import { LAYOUT } from '@/libs/constants/layout'
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,6 +37,7 @@ const router = createRouter({
 			component: () => import('@/pages/LoginView.vue'),
 			meta: {
 				requiresGuest: true,
+				layout: LAYOUT.PUBLIC
 			},
 		},
 	],

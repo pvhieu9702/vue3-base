@@ -4,16 +4,13 @@
 	import FormContainer from '@/components/ui/Form/FormContainer.vue'
 	import yup, { useSchema } from '@/libs/validation'
 	import type { AuthRequest } from '@/types/auth'
-	import { useUiStore } from '../stores/uiStore'
 	import { AuthApi } from '@/services/api/auth'
 	import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/libs/constants/local'
 	import { setCookie } from '@/libs/helpers/cookie'
 	import router from '@/router'
-	import { LAYOUT } from '@/libs/constants/layout'
 	import type { RequestError } from '@/types/core'
 	import { useMutation } from '@tanstack/vue-query'
 
-	const uiStore = useUiStore()
 	interface LoginInterface extends AuthRequest {
 		remember?: boolean
 	}
@@ -42,7 +39,6 @@
 			setCookie(ACCESS_TOKEN, accessToken)
 			setCookie(REFRESH_TOKEN, refreshToken)
 			router.push({ name: 'home' })
-			uiStore.setLayout(LAYOUT.DEFAULT)
 		},
 		onError: (err: RequestError) => {
 			console.error(err)
@@ -75,6 +71,10 @@
 			<FormContainer
 				@submit="handleSubmit"
 				:validation-schema="validationSchema"
+				:init-values="{
+					email: 'admin@example.com',
+					password: 'admin123',
+				}"
 			>
 				<LoginForm />
 			</FormContainer>

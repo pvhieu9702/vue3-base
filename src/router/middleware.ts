@@ -1,19 +1,21 @@
-import { LAYOUT } from '@/libs/constants/layout'
-import { getAccessToken } from '@/libs/helpers/auth'
-import { useUiStore } from '@/stores/uiStore'
+import { getAccessToken, getRefreshToken } from '@/libs/helpers/auth'
+import { refreshTokenHandle } from '@/services/api/core/axios'
 import type { NavigationAuthGuard, RouteMeta } from '@/types/route'
 
-export const authGuard: NavigationAuthGuard = (to, from, next) => {
-	const uiStore = useUiStore()
+export const authGuard: NavigationAuthGuard = async (to, from, next) => {
 	const accessToken = getAccessToken()
+	const refreshToken = getRefreshToken()
 	const userRole = 'user'
 
 	const meta = to.meta as RouteMeta
 	if (meta.requiresAuth && !accessToken) {
-		uiStore.setLayout(LAYOUT.PUBLIC)
-		return next({ name: 'login' })
+		if (!refreshToken) {
+			return next({ name: 'login' })
+		}
+		await refreshTokenHandle()
 	}
-	uiStore.setLayout(LAYOUT.DEFAULT)
+
+	// TODO: Verify access token, nếu fail thì chuyển về trang login
 
 	// If authenticated and access to guest route, redirect to home
 	if (meta.requiresGuest && accessToken) {

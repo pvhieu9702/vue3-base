@@ -1,21 +1,25 @@
 import { defineStore } from 'pinia'
 import type { UiState } from '@/types/ui'
-import { LAYOUT } from '@/libs/constants/layout'
-import type { ValueOf } from '@/types/core'
+import { getCookie, setCookie } from '@/libs/helpers/cookie'
+import { UI_COOKIE } from '@/libs/constants/local'
 
 export const useUiStore = defineStore('ui', {
-	state: (): UiState => ({
-		darkMode: false,
-		currentLayout: LAYOUT.PUBLIC,
-		// currentLayout: LAYOUT.PUBLIC,
-	}),
+	state: (): UiState => {
+		const cookieUi = getCookie(UI_COOKIE)
+		const parseCookie = cookieUi ? JSON.parse(cookieUi) : null
+		return {
+			darkMode: parseCookie?.darkMode ?? false,
+		}
+	},
 	actions: {
 		toggleDarkMode() {
 			this.darkMode = !this.darkMode
 			document.documentElement.classList.toggle('dark-theme')
-		},
-		setLayout(layout: ValueOf<typeof LAYOUT>) {
-			this.currentLayout = layout
+			saveUiCookie(this.$state)
 		},
 	},
 })
+
+const saveUiCookie = (state: UiState) => {
+	setCookie(UI_COOKIE, JSON.stringify(state))
+}

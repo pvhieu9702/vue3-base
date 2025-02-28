@@ -1,5 +1,6 @@
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/libs/constants/local'
 import { getCookie, removeCookie, setCookie } from '@/libs/helpers/cookie'
+import router from '@/router'
 
 export const getAccessToken = (): string | null => {
 	return getCookie(ACCESS_TOKEN) || null
@@ -28,4 +29,5 @@ export const removeRefreshToken = () => {
 export const handleLogout = async () => {
 	removeCookie(ACCESS_TOKEN)
 	removeCookie(REFRESH_TOKEN)
+	router.push({ name: 'login' })
 }

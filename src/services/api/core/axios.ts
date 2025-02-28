@@ -3,12 +3,13 @@ import {
 	getAccessToken,
 	getRefreshToken,
 	handleLogout,
+	removeAccessToken,
+	removeRefreshToken,
+	setAccessToken,
+	setRefreshToken,
 } from '@/libs/helpers/auth'
+import type { AuthResponse } from '@/types/auth'
 import axios, { type AxiosResponse } from 'axios'
-
-const IS_REFRESH_TOKEN = false
-let isTokenExpired = false
-let refreshTokenRequest: Promise<unknown> | null = null
 
 const instance = axios.create({
 	baseURL: import.meta.env.VITE_BASE_URL_API,
@@ -19,25 +20,21 @@ const instance = axios.create({
 })
 
 /** Refresh token */
-const refreshTokenHandle = async (): Promise<string | undefined> => {
+export const refreshTokenHandle = async (): Promise<string | undefined> => {
 	try {
-		const token = getRefreshToken()
-		await axios.get<void, AxiosResponse<unknown>>(
-			`${import.meta.env.BASE_URL}/auth/refresh`,
-			{
-				headers: {
-					Authorization: token ? `Bearer ${token}` : undefined,
-				},
-			},
-		)
-		// [TODO]: Set accessToken
-		// [TODO]: Set refreshToken
+		const refreshToken = getRefreshToken()
+		if (!refreshToken) return undefined
 
-		return 'new token'
+		const { data: token } = await axios.post<void, AxiosResponse<AuthResponse>>(
+			`${import.meta.env.VITE_BASE_URL_API}/refresh`, { refreshToken },
+		)
+		setAccessToken(token.accessToken)
+		setRefreshToken(token.refreshToken)
+		return token.accessToken
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	} catch (error: any) {
-		// [TODO]: Remove accessToken
-		// [TODO]: Remove refreshToken
+		removeAccessToken()
+		removeRefreshToken()
 		return undefined
 	}
 }
@@ -65,30 +62,23 @@ instance.interceptors.response.use(
 	async (error: any) => {
 		const status = error?.response?.status
 		const { url } = error.config
-		const noRefreshTokenUrls = ['/auth/refresh']
+		const noRefreshTokenUrls = ['/refresh']
+		const refreshToken = getRefreshToken()
 
 		if (noRefreshTokenUrls.includes(url)) return Promise.reject(error)
-		if (status === 401 && !IS_REFRESH_TOKEN) {
+		if (status === 401 && !refreshToken) {
 			handleLogout()
-			window.location.reload()
 		}
-		if (status === 401 && IS_REFRESH_TOKEN) isTokenExpired = true
-
-		const token = getRefreshToken()
-		if (isTokenExpired && token) {
-			refreshTokenRequest = refreshTokenRequest || refreshTokenHandle()
-
-			const newToken = await refreshTokenRequest
-			refreshTokenRequest = null
-			isTokenExpired = false
-
-			if (newToken)
+		if (status === 401 && refreshToken) {
+			const newAccessToken = await refreshTokenHandle()
+			if (newAccessToken) {
 				return instance.request({
 					...error.config,
 					headers: {
-						Authorization: newToken,
+						Authorization: newAccessToken,
 					},
 				})
+			}
 			return Promise.reject(error)
 		}
 		return Promise.reject(error)
