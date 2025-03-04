@@ -51,7 +51,7 @@
 				:validateOnModelUpdate="props.validateOnModelUpdate"
 			>
 				<InputNumber
-					:model-value="field.value"
+					v-model="field.value"
 					:id="uid"
 					:placeholder="props.placeholder"
 					:disabled="props.disabled"

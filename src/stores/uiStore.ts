@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { UiState } from '@/types/ui'
 import { getCookie, setCookie } from '@/libs/helpers/cookie'
-import { UI_COOKIE } from '@/libs/constants/local'
+import { UI_COOKIE } from '@/libs/config/local'
 
 export const useUiStore = defineStore('ui', {
 	state: (): UiState => {

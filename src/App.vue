@@ -2,7 +2,7 @@
 <script setup lang="ts">
 	import { computed } from 'vue'
 	import { RouterView, useRoute } from 'vue-router'
-	import { LAYOUT } from './libs/constants/layout'
+	import { LAYOUT } from './libs/config/layout'
 	import type { ValueOf } from './types/core'
 	import AppLayout from './components/layout/AppLayout/AppLayout.vue'
 	import PublicLayout from './components/layout/PublicLayout/PublicLayout.vue'

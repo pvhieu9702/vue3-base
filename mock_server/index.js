@@ -121,16 +121,78 @@ app.post('/api/logout', (req, res) => {
 	res.json({ message: 'Đăng xuất thành công' })
 })
 
-// API: Lấy danh sách users
+// API: Lấy danh sách users với bộ lọc và phân trang
 app.get('/api/users', authenticateToken, (req, res) => {
-	db.all(
-		'SELECT id, username, email, gender, age, created_at FROM users',
-		[],
-		(err, rows) => {
+	const { username, email, gender, age, limit = 10, page = 1 } = req.query
+
+	const perPage = parseInt(limit) || 10
+	const currentPage = parseInt(page) || 1
+	const offset = (currentPage - 1) * perPage
+
+	let query = `SELECT id, username, email, gender, age, created_at FROM users WHERE 1=1`
+	let countQuery = `SELECT COUNT(*) as total FROM users WHERE 1=1`
+	let params = []
+	let countParams = []
+
+	// Tìm kiếm theo username hoặc email
+	if (username) {
+		query += ` AND username LIKE ?`
+		countQuery += ` AND username LIKE ?`
+		params.push(`%${username}%`)
+		countParams.push(`%${username}%`)
+	}
+
+	if (email) {
+		query += ` AND email LIKE ?`
+		countQuery += ` AND email LIKE ?`
+		params.push(`%${email}%`)
+		countParams.push(`%${email}%`)
+	}
+
+	// Lọc theo giới tính
+	if (gender) {
+		query += ` AND gender = ?`
+		countQuery += ` AND gender = ?`
+		params.push(gender)
+		countParams.push(gender)
+	}
+
+	// Lọc theo tuổi
+	if (age) {
+		query += ` AND age = ?`
+		params.push(age)
+		countParams.push(age)
+	}
+
+	// Sắp xếp theo ngày tạo mới nhất
+	query += ` ORDER BY created_at DESC`
+
+	// Phân trang
+	query += ` LIMIT ? OFFSET ?`
+	console.log(query)
+
+	params.push(perPage, offset)
+
+	// Lấy tổng số bản ghi trước khi lấy dữ liệu
+	db.get(countQuery, countParams, (err, result) => {
+		if (err) return res.status(500).json({ error: err.message })
+
+		const total = result?.total || 0
+		const totalPages = Math.ceil(total / perPage)
+
+		// Lấy dữ liệu users
+		db.all(query, params, (err, rows) => {
 			if (err) return res.status(500).json({ error: err.message })
-			res.json({ data: rows })
-		},
-	)
+
+			res.json({
+				data: rows,
+				page: currentPage,
+				per_page: perPage,
+				total: total,
+				total_pages: totalPages,
+			})
+		})
+	})
 })
 
 // API: Lấy user theo ID

@@ -1,9 +1,9 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 	import FormContainer from '@/components/ui/Form/FormContainer.vue'
+	import FormSelectControl from '@/components/ui/Form/FormSelectControl.vue'
 	import FormTextControl from '@/components/ui/Form/FormTextControl.vue'
 	import { useTableProvider } from '@/libs/hooks/useTable'
-	import yup, { useSchema } from '@/libs/validation'
 	import router from '@/router'
 	import type { User } from '@/types/models/user'
 	import { Button } from 'primevue'
@@ -11,38 +11,51 @@
 	const { setFilter } = useTableProvider<User>()
 
 	const handleSubmit = (data: any) => {
+		console.log(data)
+
 		setFilter(data)
 	}
-
-	const validationSchema = useSchema(() =>
-		yup.object({
-			email: yup.string().email('Email không hợp lệ'),
-			username: yup
-				.string()
-				.min(6, 'Vui lòng nhập ít nhất 6 ký tự và không quá 20 ký tự.')
-				.max(20, 'Vui lòng nhập ít nhất 6 ký tự và không quá 20 ký tự.'),
-		}),
-	)
 </script>
 <template>
 	<div class="flex flex-col gap-2">
-		<FormContainer
-			@submit="handleSubmit"
-			:validation-schema="validationSchema"
-		>
+		<FormContainer @submit="handleSubmit">
 			<FormTextControl
-				name="first_name"
-				label="First name"
+				name="username"
+				label="Username"
 			/>
-			<Button
-				type="submit"
-				severity="secondary"
-				label="Submit"
+			<FormTextControl
+				name="email"
+				label="Email"
 			/>
+			<FormSelectControl
+				name="gender"
+				label="Gender"
+				:options="[
+					{
+						label: 'Male',
+						value: 'male',
+					},
+					{
+						label: 'Female',
+						value: 'female',
+					},
+					{
+						label: 'Other',
+						value: 'other',
+					},
+				]"
+			/>
+			<div class="flex justify-between">
+				<Button
+					type="submit"
+					severity="secondary"
+					label="Submit"
+				/>
+				<Button
+					label="Create"
+					@click="() => router.push({ name: 'createUser' })"
+				/>
+			</div>
 		</FormContainer>
-		<Button
-			label="Create"
-			@click="() => router.push({ name: 'createUser' })"
-		/>
 	</div>
 </template>

@@ -5,7 +5,7 @@
 	import yup, { useSchema } from '@/libs/validation'
 	import type { AuthRequest } from '@/types/auth'
 	import { AuthApi } from '@/services/api/auth'
-	import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/libs/constants/local'
+	import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/libs/config/local'
 	import { setCookie } from '@/libs/helpers/cookie'
 	import router from '@/router'
 	import type { RequestError } from '@/types/core'

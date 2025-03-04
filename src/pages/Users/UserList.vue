@@ -6,7 +6,6 @@
 </script>
 
 <template>
-	<h1>Users</h1>
 	<TableProvider
 		:fetch-data="UserApi.getAll"
 		query-key="table-user"

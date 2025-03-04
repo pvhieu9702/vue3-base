@@ -4,7 +4,7 @@ import type {
 	RouteRecordRaw,
 } from 'vue-router'
 import type { UserRole } from './auth'
-import type { LAYOUT } from '@/libs/constants/layout'
+import type { LAYOUT } from '@/libs/config/layout'
 import type { ValueOf } from './core'
 
 export type RouteMeta = {
