@@ -11,8 +11,6 @@
 	const { setFilter } = useTableProvider<User>()
 
 	const handleSubmit = (data: any) => {
-		console.log(data)
-
 		setFilter(data)
 	}
 </script>

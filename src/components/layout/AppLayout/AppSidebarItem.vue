@@ -20,27 +20,26 @@
 		itemKey.value = props.parentItemKey
 			? `${props.parentItemKey}-${props.index}`
 			: String(props.index)
-		// TODO: Handle active menu by store
 	})
 </script>
 
 <template>
 	<div v-if="props.item.to">
-		<!-- <li> -->
 		<RouterLink :to="props.item?.to ? props.item.to : '#'">
-			<i
-				v-if="props.item?.icon"
-				:class="props.item.icon"
-				class="layout-menuitem-icon"
-			></i>
-			{{ props.item.label }}
-			<!-- <i
-				class="pi pi-fw pi-angle-down layout-submenu-toggler"
-				v-if="props.item.items"
-			></i> -->
+			<div class="nav-item h-10 flex items-center gap-3 px-2.5">
+				<i
+					v-if="props.item?.icon"
+					:class="props.item.icon"
+				></i>
+				{{ props.item.label }}
+			</div>
 		</RouterLink>
-		<!-- </li> -->
 	</div>
 </template>
 
-<style scoped></style>
+<style>
+	.nav-active-link .nav-item,
+	.nav-exact-active-link .nav-item {
+		background-color: #53eafd;
+	}
+</style>

@@ -8,13 +8,14 @@ export const authGuard: NavigationAuthGuard = async (to, _, next) => {
 	const userRole = 'user'
 
 	const meta = to.meta as RouteMeta
-
+	console.log('accessToken', isTokenExpired(accessToken), accessToken);
+	console.log('meta', to.meta, to.path);
 	if (meta.requiresAuth && (!accessToken || isTokenExpired(accessToken))) {
 		//TODO: Cần redirect về màn login nếu refresh token hết hạn
 		if (!refreshToken) {
 			// if (!refreshToken || isTokenExpired(refreshToken)) {
 			return next({
-				path: '/login',
+				name: 'login',
 				query: { redirect: to.fullPath }
 			})
 		}

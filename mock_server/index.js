@@ -54,10 +54,10 @@ const generateTokens = (user) => {
 	const accessToken = jwt.sign(
 		{ id: user.id, username: user.username },
 		ACCESS_SECRET,
-		{ expiresIn: '15m' },
+		{ expiresIn: '10s' },
 	)
 	const refreshToken = jwt.sign({ id: user.id }, REFRESH_SECRET, {
-		expiresIn: '30d',
+		expiresIn: '10s',
 	})
 
 	return { accessToken, refreshToken }

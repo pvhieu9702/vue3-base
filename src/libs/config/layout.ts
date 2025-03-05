@@ -1,4 +1,4 @@
-import type { SidebarItemInterface } from "@/types/layout"
+import type { SidebarItemInterface } from '@/types/layout'
 
 export const LAYOUT = Object.freeze({
 	DEFAULT: 'DEFAULT',

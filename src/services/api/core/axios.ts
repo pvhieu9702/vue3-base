@@ -26,7 +26,8 @@ export const refreshTokenHandle = async (): Promise<string | undefined> => {
 		if (!refreshToken) return undefined
 
 		const { data: token } = await axios.post<void, AxiosResponse<AuthResponse>>(
-			`${import.meta.env.VITE_BASE_URL_API}/refresh`, { refreshToken },
+			`${import.meta.env.VITE_BASE_URL_API}/refresh`,
+			{ refreshToken },
 		)
 		setAccessToken(token.accessToken)
 		setRefreshToken(token.refreshToken)

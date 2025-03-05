@@ -30,10 +30,7 @@
 
 <template>
 	<div class="flex items-center justify-between h-full px-4">
-		<RouterLink
-			to="/"
-			class="layout-topbar-logo"
-		>
+		<RouterLink to="/">
 			<div>
 				<img
 					alt="Vue logo"
